@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import math
 from pathlib import Path
+import plotly.express as px
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -57,6 +58,28 @@ def get_gdp_data():
 
     return gdp_df
 
+def make_plot(df, x_col, y_col, color_col, use_log_scale=False):
+    """Create a line plot with optional log scale.
+    
+    Args:
+        df: DataFrame containing the data to plot
+        x_col: Column name for x-axis
+        y_col: Column name for y-axis
+        color_col: Column name for color grouping
+        use_log_scale: If True, use logarithmic scale for y-axis
+    
+    Returns:
+        Plotly figure object
+    """
+    fig = px.line(
+        df, 
+        x=x_col, 
+        y=y_col, 
+        color=color_col,
+        log_y=use_log_scale
+    )
+    return fig
+
 gdp_df = get_gdp_data()
 
 # -----------------------------------------------------------------------------
@@ -109,12 +132,21 @@ st.header('GDP over time', divider='gray')
 
 ''
 
-st.line_chart(
+# Add log scale toggle
+use_log_scale = st.checkbox('Use logarithmic scale', value=False)
+
+''
+
+# Create and display the plot
+fig = make_plot(
     filtered_gdp_df,
-    x='Year',
-    y='GDP',
-    color='Country Code',
+    x_col='Year',
+    y_col='GDP',
+    color_col='Country Code',
+    use_log_scale=use_log_scale
 )
+
+st.plotly_chart(fig, use_container_width=True)
 
 ''
 ''
