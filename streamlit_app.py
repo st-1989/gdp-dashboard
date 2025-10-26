@@ -62,14 +62,16 @@ def make_plot(df, x_col, y_col, color_col, use_log_scale=False):
     """Create a line plot with optional log scale.
     
     Args:
-        df: DataFrame containing the data to plot
-        x_col: Column name for x-axis
-        y_col: Column name for y-axis
-        color_col: Column name for color grouping
-        use_log_scale: If True, use logarithmic scale for y-axis
+        df (pd.DataFrame): DataFrame containing the data to plot
+        x_col (str): Column name for x-axis
+        y_col (str): Column name for y-axis
+        color_col (str): Column name for color grouping
+        use_log_scale (bool): If True, use logarithmic scale for y-axis.
+            Note: Log scale requires positive values; zero, negative, 
+            or NaN values will be ignored in the plot.
     
     Returns:
-        Plotly figure object
+        plotly.graph_objs.Figure: Plotly figure object
     """
     fig = px.line(
         df, 
